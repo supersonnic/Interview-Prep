@@ -12,7 +12,9 @@ This repository includes implementation of common data structures in C++;
   This file contains declarations of all the functions used by the client program
   
   To compile & run:
+  
   g++ list.c client.c
+  
   ./a.out
   
 * Binary Trees
