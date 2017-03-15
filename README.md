@@ -1,8 +1,8 @@
-#Data Structures
+# Data Structures
 This repository includes implementation of common data structures in C++;
 
 ---
-###Summary of Contents
+### Summary of Contents
 * Linked Lists
   * list.cpp,
   This file includes the implementation of all the functions declared in list.h
