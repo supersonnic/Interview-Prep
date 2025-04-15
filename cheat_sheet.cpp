@@ -112,10 +112,9 @@ vector<int> extract_digits(int num) {
 }
 
 /****************************** bit manipulation ******************************/
-#include <bitset>
-int bin_num = 0b101010;                       // binary literal, C++14 and later 
-bitset<8> bin_num(num);                       // 8-bit binary representation of num
-
+int num = 0b101010;                           // binary literal, C++14 and later
+num = num << n;                               // left shitf, multiplies by 2^n
+num = num >> n;                               // right shitf, divides by 2^n
 bool is_set = ((1 << i) & num) != 0;          // gets the i-th bit of num
 int num = num | (1 << i);                     // sets the i-th bit of num to 1
 int num = num & ~(1 << i);                    // clears the i-th bit of num to 0
@@ -124,6 +123,19 @@ bool is_even = (num & 1) == 0;                // nums is even if last bit is 0
 // num - 1 flips all bits after the rightmost 1 in num, including the rightmost 1.
 // If num is a power of 2, ie., has only one 1 bit, ANDing num with num - 1 yields 0.
 bool is_power_of_2 = (num & (num - 1)) == 0;
+
+#include <bitset>
+bitset<n> zeros;                              // n-bit binary, all 0's
+bitset<8> bs(num);                            // 8-bit binary from int
+bitset<8> bs2("11111111");                    // 8-bit binary from string
+bs.set(i);                                    // sets the i-th bit
+bs.reset(i);                                  // clears the i-th bit
+bs.toggle();                                  // toggles all the bits
+boot is_set = bs.test(i);                     // checks if the i-th bit is set
+int num_ones = bs.count();                    // returns the nunber of 1's
+bs[i] = bs[i] ^ bs[i];                        // accessting i-th bit using operator[]
+bitset<8> bs3 = bs & bs2;                     // performing binary operation on bitset
+bitset<8> bs4 = bs << 2;                      // performing shift operation on bitset
 
 /******************************* array & vector *******************************/
 #include <vector>
