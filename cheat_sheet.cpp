@@ -16,21 +16,21 @@ string str4(char_arr);                        // constructs string from char arr
 string str5(char_ptr);                        // constructs string from char pointer 
 
 char c = str[i];                              // random char access
+char c = str.front();                        // returns first character
+char c = str.back();                         // returns last character
+char c = str.at(i);                          // returns character at index i, throws exception if out of range
 size_t str_size = str.size();                 // returns string size, same as str.length()
 bool is_empty = str.empty();                  // checks if string is empty, returns bool
 
 /* returns position of first occurrence of "ab" in str, or string::npos if not
    found, time complexity: O(N) */
 size_t pos = str.find("ab");
-
 /* returns 0 if str == str2, 1 if str > str2, -1 if str < str2 lexicographically,
    time complexity: O(N) */
 int comp = str.compare(str2);
-
 /* Following functions return string and do not modify str */
 string subs = str.substr(pos);              // [pos, ), where pos is the starting position index
 string subs = str.substr(pos, len);         // [pos, pos + len - 1], complexity O(len)
-
 /* Following functions modify str and return a reference to the modified string */
 str.append(str2);                  // appends to str, same as str += str2, O(len of str2) 
 str.append(str2, pos, len);        // appends length len to str from position pos
@@ -190,6 +190,11 @@ sort(v.begin(), v.end(), greater<int>());     // sort vector in descending order
 sort(v.begin(), v.end(), [](pair<int, int>& a, pair<int, int>& b) {    
     return a.first < b.first;                 // if true, a comes before b (ascending order)
 });
+/* Since the vector has an explicit type, we can also use auto. It's also foot
+   practice to add const.*/
+sort(v.begin(), v.end(), [](const auto& a, const auto& b) {    
+    return a.first < b.first;                 // if true, a comes before b (ascending order)
+});
 
 /******************************** map & set (hash tables) **********************/
 #include <unordered_map>
@@ -197,6 +202,8 @@ sort(v.begin(), v.end(), [](pair<int, int>& a, pair<int, int>& b) {
 map<int, string> om;                          // O(logN) for insert/find/erase, uses a balanced tree data structure to keep elements sorted
 unordered_map<int, string> m;                 // O(1) average for insert/find/erase, O(N) worst-case, unsorted
 m = {{1, "one"}, {2, "two"}, {3, "three"}};   // initialize map
+unordered_set<int> m2(v.begin(), v.end());     // initialize set from vector, O(N) complexity
+unordered_map<int, string> m3(s.begin(), s.end()); // initialize map from set, O(N) complexity
 
 /* The following access method creates the key value pair if it does not exist
    in the map. The value would be default construced, e.g. 0 for int, "" for
@@ -213,6 +220,7 @@ m.erase(itr);                                 // deletes by iterator, returns it
 m.clear();                                    // clears all elements, returns void
 size_t map_size = m.size();                   // returns size of map
 bool is_empty = m.empty();                    // checks if map is empty
+// TODO: add map example with custom comparator
 
 /* Iterates through the map, processing key/value pairs. The iterator is
    pre-incremented for efficiency, post-incrementing creates a temporary copy of
@@ -275,8 +283,10 @@ q.pop();                                      // pops the front element, returns
 bool is_empty = q.empty();                    // checks if queue is empty
 
 priority_queue<int> pq;                       // O(logN) for push/pop, O(1) for top, max heap by default
+priority_queue<Node*> npq;                    // max heap of Node pointers
 priority_queue<int, greater<int>> min_heap_pq;// min heap using functor
 pq.push(val);                                 // pushes element to the heap
+npq.push(new Node(1));                        // pushes new object to heap
 int top = pq.top();                           // peeks the top of the heap
 pq.pop();                                     // pops the top element, returns void
 bool is_empty = pq.empty();                   // checks if heap is empty
@@ -291,9 +301,30 @@ struct cmp{
     return a->x < b->x;                       // max heap
   }
 };
-priority_queue<Node*, vector<Node*>, cmp> pq; // NOTE:  the format is different for sort function!!!
+priority_queue<Node*, vector<Node*>, cmp> pq;
 
-pq.push(new Node(1));                         // push new node to the custom heap
+/* Creating and maintaining a heap (priority queue) using a vector. */
+vector<int> v = {1, 2, 3, 4, 5};
+make_heap(v.begin(), v.end());               // creates a max heap from the vector, O(N)
+make_heap(v.begin(), v.end(), greater<int>()); // creates a min heap from the vector, O(N)
+int top = v.front();                         // peeks the top of the heap, O(1)
+/* Pushing to this type of structure, requires 2 operations, one to insert the
+   item to the back of the vector, and one to restore the vector order. */
+v.push_back(6);                              // pushes element to the back of the vector O(1)
+push_heap(v.begin(), v.end());               // restores the heap order, O(logN)
+/* Similarly, popping requires moving the element to the back of the vector first,
+   then removing it.*/
+pop_heap(v.begin(), v.end());                // moves the top element to the back of the vector, O(logN)
+v.pop_back();                                // removes the top element, O(1)
+
+/* Creating a heap vector with a custom comparator using lambda. Since we need
+    to pass the lambda to push_heap and pop_heap as well, it is better to define
+    it outside, so it can be reused. */
+auto node_cmp = [](Node* a, Node* b) {return a->val > b->val; }; // min heap
+make_heap(v.begin(), v.end(), node_cmp);     // creates a heap from the vector, O(N)
+v.push_back(6);                                // pushes element to the back of the vector O(1)
+push_heap(v.begin(), v.end(), node_cmp);     // pushes element to the back of the vector, O(logN)
+pop_heap(v.begin(), v.end(), node_cmp);      // moves the top element to the back of the vector, O(logN)
 
 #include<deque>                               // O(1) for push/pop from both ends, O(1) for access
 deque<int> dq(n);                             // creates a deque of size n, initialized to 0's
@@ -373,3 +404,6 @@ p->print();                                   // access class member function
 /********************************* flow control ********************************/
 continue;                                     // skip to next iteration of loop
 break;                                        // break out of loop
+
+
+
