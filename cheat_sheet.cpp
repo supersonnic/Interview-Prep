@@ -151,6 +151,7 @@ vector<int> v[10];                            // creates a fixed-size array of v
 vector<int> v;                                // creates an empty, non-initialized vector
 vector<int> v(s);                             // creates a vector of size s, initialized to 0's
 vector<int> v(s, n);                          // creates vector with of size s, initialized to n's
+vector<int> sv(v.begin(), v.end() - 2);       // creates a subvector from another vector
 vector<vector<int>> matrix;                   // creates an empty, non-initialized 2D matrix
 vector<vector<int>> matrix(N, vector<int>(M));// creates a 2D matrix of N by M, initialized to 0's
 
